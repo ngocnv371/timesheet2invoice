@@ -1,0 +1,5 @@
+{
+  "name": "Timesheet to Invoice",
+  "description": "Professional tool to transform Excel timesheets into polished, AI-enhanced invoices with sheet selection and date range filtering.",
+  "requestFramePermissions": []
+}
