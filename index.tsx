@@ -14,3 +14,4 @@ root.render(
     <App />
   </React.StrictMode>
 );
+console.log("Application has started successfully.");
