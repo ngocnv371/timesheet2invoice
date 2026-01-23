@@ -16,10 +16,10 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ items, config, summar
   const fullAccountName = `${config.accountFirstName} ${config.accountLastName}`.trim();
 
   return (
-    <div id="invoice-content" className="bg-white p-12 md:p-16 shadow-none md:shadow-xl border-none md:border border-slate-200 max-w-5xl mx-auto rounded-none md:rounded-lg text-slate-800 font-sans">
+    <div id="invoice-content" className="bg-white p-6 md:p-8 shadow-none md:shadow-xl border-none md:border border-slate-200 max-w-5xl mx-auto rounded-none md:rounded-lg text-slate-800 font-sans">
       {/* Header Section */}
-      <div className="flex justify-between items-start mb-16">
-        <div className="space-y-4">
+      <div className="flex justify-between items-start mb-2">
+        <div className="space-y-2">
           <div>
             <h1 className="text-5xl font-black text-slate-900 uppercase tracking-tighter mb-2">Invoice</h1>
             <p className="text-slate-400 font-bold tracking-widest">{config.invoiceNumber}</p>
@@ -40,9 +40,9 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ items, config, summar
       </div>
 
       {/* Addresses Section */}
-      <div className="grid grid-cols-2 gap-12 mb-16 border-y border-slate-100 py-10">
+      <div className="grid grid-cols-2 gap-8 mb-4 border-y border-slate-100 py-2">
         <div>
-          <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Bill To</h3>
+          <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Bill To</h3>
           <p className="text-xl font-bold text-slate-900 mb-2">{config.clientName}</p>
           {config.clientEmail && <p className="text-sm text-indigo-600 font-medium mb-1">{config.clientEmail}</p>}
           <p className="text-sm text-slate-500 whitespace-pre-line leading-relaxed">{config.clientAddress}</p>
@@ -56,28 +56,28 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ items, config, summar
 
       {/* Description Block */}
       {config.description && (
-        <div className="mb-12">
-          <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Project Overview</h3>
+        <div className="mb-4">
+          <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Project Overview</h3>
           <p className="text-slate-700 text-lg font-medium leading-snug">{config.description}</p>
           {summary && <p className="text-slate-500 text-sm italic mt-2">{summary}</p>}
         </div>
       )}
 
       {/* Table Section */}
-      <table className="w-full mb-12">
+      <table className="w-full mb-4">
         <thead>
           <tr className="border-b-4 border-slate-900 text-left">
-            <th className="py-5 font-black text-[10px] uppercase tracking-widest text-slate-400">Description of Service</th>
-            <th className="py-5 font-black text-[10px] uppercase tracking-widest text-slate-400 text-right w-32">Hours</th>
-            <th className="py-5 font-black text-[10px] uppercase tracking-widest text-slate-400 text-right w-40">Amount</th>
+            <th className="py-3 font-black text-[10px] uppercase tracking-widest text-slate-400">Description of Service</th>
+            <th className="py-3 font-black text-[10px] uppercase tracking-widest text-slate-400 text-right w-32">Hours</th>
+            <th className="py-3 font-black text-[10px] uppercase tracking-widest text-slate-400 text-right w-40">Amount</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
           {items.map((item, idx) => (
             <tr key={idx} className="group hover:bg-slate-50 transition-colors">
-              <td className="py-5 font-semibold text-slate-800">{item.feature}</td>
-              <td className="py-5 text-right font-medium text-slate-500">{item.hours.toFixed(1)}</td>
-              <td className="py-5 text-right font-bold text-slate-900">
+              <td className="py-2 font-semibold text-slate-800">{item.feature}</td>
+              <td className="py-2 text-right font-medium text-slate-500">{item.hours.toFixed(1)}</td>
+              <td className="py-2 text-right font-bold text-slate-900">
                 {config.currency} {(item.hours * config.hourlyRate).toFixed(2)}
               </td>
             </tr>
@@ -86,11 +86,11 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ items, config, summar
       </table>
 
       {/* Totals Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
+      <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-10">
         <div className="flex-1 max-w-sm">
-          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Payment Instructions</h3>
-            <div className="space-y-3 text-xs">
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Payment Instructions</h3>
+            <div className="space-y-2 text-xs">
               {config.bankName && <div className="flex justify-between"><span className="text-slate-400">Bank:</span><span className="font-bold text-right">{config.bankName}</span></div>}
               {config.swiftCode && <div className="flex justify-between"><span className="text-slate-400">SWIFT:</span><span className="font-bold text-right">{config.swiftCode}</span></div>}
               {fullAccountName && <div className="flex justify-between"><span className="text-slate-400">Name:</span><span className="font-bold text-right">{fullAccountName}</span></div>}
@@ -100,7 +100,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ items, config, summar
           </div>
         </div>
 
-        <div className="w-full md:w-80 space-y-4">
+        <div className="w-full md:w-80 space-y-2">
           <div className="flex justify-between text-slate-500 font-medium">
             <span>Subtotal</span>
             <span>{config.currency} {subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
@@ -111,7 +111,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ items, config, summar
               <span>{config.currency} {tax.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
           )}
-          <div className="flex justify-between items-center py-6 border-t-4 border-slate-900">
+          <div className="flex justify-between items-center py-4 border-t-4 border-slate-900">
             <span className="font-black text-[10px] uppercase tracking-widest text-slate-400">Amount Due</span>
             <span className="font-black text-4xl text-slate-900">{config.currency} {total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
           </div>
@@ -119,10 +119,9 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ items, config, summar
       </div>
 
       {/* Footer Notes */}
-      <div className="pt-10 border-t border-slate-100 text-slate-400 text-[10px] leading-relaxed italic">
+      <div className="pt-6 border-t border-slate-100 text-slate-400 text-[10px] leading-relaxed italic">
         <p className="font-bold uppercase tracking-widest mb-2 not-italic text-slate-900">Important Notes</p>
         <p className="max-w-xl">{config.notes}</p>
-        <p className="mt-8 text-center uppercase tracking-[0.2em] font-black opacity-30">Invoice generated via SheetInvoice Pro</p>
       </div>
     </div>
   );
