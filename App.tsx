@@ -72,6 +72,7 @@ const App: React.FC = () => {
   const [processedItems, setProcessedItems] = useState<FeatureRow[]>([]);
   const [summary, setSummary] = useState<string>("");
   const [step, setStep] = useState(1);
+  const [warnings, setWarnings] = useState<{ date: string; hours: number }[]>([]);
 
   const sortMonthDay = (dates: string[]) => {
     return [...dates].sort((a, b) => {
@@ -155,6 +156,12 @@ const App: React.FC = () => {
     const endIdx = Math.max(startIndex, endIndex);
     const activeDateKeys = masterList.slice(startIdx, endIdx + 1);
     const aggregated: Record<string, number> = {};
+    const dailyTotals: Record<string, number> = {};
+
+    // Initialize daily totals
+    activeDateKeys.forEach(dateKey => {
+      dailyTotals[dateKey] = 0;
+    });
 
     state.selectedSheets.forEach(sheetName => {
       const sheet = state.workbook.Sheets[sheetName];
@@ -166,7 +173,10 @@ const App: React.FC = () => {
         activeDateKeys.forEach(dateKey => {
           if (row[dateKey]) {
             const val = parseFloat(row[dateKey]);
-            if (!isNaN(val)) totalHours += val;
+            if (!isNaN(val)) {
+              totalHours += val;
+              dailyTotals[dateKey] += val;
+            }
           }
         });
         if (totalHours > 0) {
@@ -175,6 +185,12 @@ const App: React.FC = () => {
         }
       });
     });
+
+    // Check for dates with less than 8 hours
+    const datesWithLowHours = activeDateKeys
+      .filter(dateKey => dailyTotals[dateKey] > 0 && dailyTotals[dateKey] < 8)
+      .map(dateKey => ({ date: dateKey, hours: dailyTotals[dateKey] }));
+    setWarnings(datesWithLowHours);
 
     const items = Object.entries(aggregated).map(([feature, hours]) => ({ feature, hours }));
     setProcessedItems(items);
@@ -192,6 +208,7 @@ const App: React.FC = () => {
     setStep(1);
     setProcessedItems([]);
     setSummary("");
+    setWarnings([]);
   };
 
   const inputClass = "w-full bg-slate-50 border-2 border-slate-100 rounded-xl p-3 font-medium outline-none focus:border-indigo-500 transition-all text-sm";
@@ -438,6 +455,29 @@ const App: React.FC = () => {
                 <button onClick={reset} className="p-3 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><Trash2 size={20} /></button>
               </div>
             </div>
+            {warnings.length > 0 && (
+              <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-6 mb-8 no-print">
+                <div className="flex items-start gap-4">
+                  <div className="p-2 bg-amber-100 rounded-lg flex-shrink-0">
+                    <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-amber-900 mb-2">⚠️ Low Hours Detected</h4>
+                    <p className="text-amber-800 text-sm mb-3">The following dates have less than 8 hours recorded:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {warnings.map(w => (
+                        <div key={w.date} className="bg-white border border-amber-200 rounded-lg px-3 py-2">
+                          <span className="font-bold text-amber-900 text-sm">{w.date}</span>
+                          <span className="text-amber-700 text-sm ml-2">({w.hours.toFixed(1)}h)</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
             <InvoiceTemplate items={processedItems} config={invoiceConfig} summary={summary} />
           </div>
         )}
