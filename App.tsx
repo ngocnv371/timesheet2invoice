@@ -3,6 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Upload, FileSpreadsheet, ChevronRight, Check, Printer, Sparkles, Settings2, Trash2, Calendar, Layout, Building2, User, CreditCard, FileText } from 'lucide-react';
 import { FeatureRow, InvoiceConfig, TimesheetState } from './types';
 import InvoiceTemplate from './components/InvoiceTemplate';
+import exampleImage from './assets/example.png';
 
 // Access XLSX from window because it's loaded via CDN in index.html
 declare const XLSX: any;
@@ -254,7 +255,7 @@ const App: React.FC = () => {
               <div className="relative group max-w-3xl">
                 <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
                 <img 
-                  src={`${import.meta.env.BASE_URL}/assets/example.png`}
+                  src={exampleImage}
                   alt="Example Timesheet Format" 
                   className="relative rounded-xl shadow-2xl border border-slate-200 w-full"
                 />
