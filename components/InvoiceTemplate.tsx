@@ -13,8 +13,6 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ items, config, summar
   const tax = subtotal * (config.taxRate / 100);
   const total = subtotal + tax;
 
-  const fullAccountName = `${config.accountFirstName} ${config.accountLastName}`.trim();
-
   return (
     <div id="invoice-content" className="bg-white p-6 md:p-8 shadow-none md:shadow-xl border-none md:border border-slate-200 max-w-5xl mx-auto rounded-none md:rounded-lg text-slate-800 font-sans">
       {/* Header Section */}
@@ -112,7 +110,8 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ items, config, summar
           <div className="space-y-2 text-xs">
             {config.bankName && <div className="flex justify-between"><span className="text-slate-400">Bank:</span><span className="font-bold text-right">{config.bankName}</span></div>}
             {config.swiftCode && <div className="flex justify-between"><span className="text-slate-400">SWIFT:</span><span className="font-bold text-right">{config.swiftCode}</span></div>}
-            {fullAccountName && <div className="flex justify-between"><span className="text-slate-400">Name:</span><span className="font-bold text-right">{fullAccountName}</span></div>}
+            {config.accountFirstName && <div className="flex justify-between"><span className="text-slate-400">First Name:</span><span className="font-bold text-right">{config.accountFirstName}</span></div>}
+            {config.accountLastName && <div className="flex justify-between"><span className="text-slate-400">Last Name:</span><span className="font-bold text-right">{config.accountLastName}</span></div>}
             {config.accountNumber && <div className="flex justify-between"><span className="text-slate-400">Account/IBAN:</span><span className="font-bold text-indigo-600 text-right">{config.accountNumber}</span></div>}
             {config.bankAddress && <p className="text-[9px] text-slate-400 mt-2 leading-tight">Bank Addr: {config.bankAddress}</p>}
           </div>
