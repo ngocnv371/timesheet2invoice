@@ -254,7 +254,7 @@ const App: React.FC = () => {
               <div className="relative group max-w-3xl">
                 <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
                 <img 
-                  src="assets/example.png" 
+                  src={`${import.meta.env.BASE_URL}/assets/example.png`}
                   alt="Example Timesheet Format" 
                   className="relative rounded-xl shadow-2xl border border-slate-200 w-full"
                 />
