@@ -86,20 +86,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ items, config, summar
       </table>
 
       {/* Totals Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-10">
-        <div className="flex-1 max-w-sm">
-          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Payment Instructions</h3>
-            <div className="space-y-2 text-xs">
-              {config.bankName && <div className="flex justify-between"><span className="text-slate-400">Bank:</span><span className="font-bold text-right">{config.bankName}</span></div>}
-              {config.swiftCode && <div className="flex justify-between"><span className="text-slate-400">SWIFT:</span><span className="font-bold text-right">{config.swiftCode}</span></div>}
-              {fullAccountName && <div className="flex justify-between"><span className="text-slate-400">Name:</span><span className="font-bold text-right">{fullAccountName}</span></div>}
-              {config.accountNumber && <div className="flex justify-between"><span className="text-slate-400">Account/IBAN:</span><span className="font-bold text-indigo-600 text-right">{config.accountNumber}</span></div>}
-              {config.bankAddress && <p className="text-[9px] text-slate-400 mt-2 leading-tight">Bank Addr: {config.bankAddress}</p>}
-            </div>
-          </div>
-        </div>
-
+      <div className="flex justify-end mb-8 print:break-inside-avoid">
         <div className="w-full md:w-80 space-y-2">
           <div className="flex justify-between text-slate-500 font-medium">
             <span>Subtotal</span>
@@ -113,7 +100,21 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ items, config, summar
           )}
           <div className="flex justify-between items-center py-4 border-t-4 border-slate-900">
             <span className="font-black text-[10px] uppercase tracking-widest text-slate-400">Amount Due</span>
-            <span className="font-black text-4xl text-slate-900">{config.currency} {total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+            <span className="font-black text-4xl text-slate-900">{config.currency + total.toLocaleString(undefined, { minimumFractionDigits: 2, })}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Payment Instructions Section */}
+      <div className="mb-10 print:break-inside-avoid">
+        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 max-w-md">
+          <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Payment Instructions</h3>
+          <div className="space-y-2 text-xs">
+            {config.bankName && <div className="flex justify-between"><span className="text-slate-400">Bank:</span><span className="font-bold text-right">{config.bankName}</span></div>}
+            {config.swiftCode && <div className="flex justify-between"><span className="text-slate-400">SWIFT:</span><span className="font-bold text-right">{config.swiftCode}</span></div>}
+            {fullAccountName && <div className="flex justify-between"><span className="text-slate-400">Name:</span><span className="font-bold text-right">{fullAccountName}</span></div>}
+            {config.accountNumber && <div className="flex justify-between"><span className="text-slate-400">Account/IBAN:</span><span className="font-bold text-indigo-600 text-right">{config.accountNumber}</span></div>}
+            {config.bankAddress && <p className="text-[9px] text-slate-400 mt-2 leading-tight">Bank Addr: {config.bankAddress}</p>}
           </div>
         </div>
       </div>
