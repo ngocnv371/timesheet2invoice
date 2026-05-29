@@ -44,6 +44,7 @@ const DEFAULT_CONFIG: InvoiceConfig = {
 
 const App: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const [state, setState] = useState<TimesheetState>({
     workbook: null,
     sheetNames: [],
@@ -129,9 +130,7 @@ const App: React.FC = () => {
     }
   }, [state.selectedSheets, state.workbook]);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const uploadedFile = e.target.files?.[0];
-    if (!uploadedFile) return;
+  const processUploadedFile = useCallback((uploadedFile: File) => {
     setFile(uploadedFile);
     const reader = new FileReader();
     reader.onload = (evt) => {
@@ -145,6 +144,30 @@ const App: React.FC = () => {
       }
     };
     reader.readAsBinaryString(uploadedFile);
+  }, []);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const uploadedFile = e.target.files?.[0];
+    if (!uploadedFile) return;
+    processUploadedFile(uploadedFile);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const uploadedFile = e.dataTransfer.files?.[0];
+    if (!uploadedFile) return;
+    processUploadedFile(uploadedFile);
   };
 
   const toggleSheet = (name: string) => {
@@ -250,7 +273,13 @@ const App: React.FC = () => {
       <main>
         {step === 1 && (
           <div className="flex flex-col items-center justify-center min-h-[50vh] animate-in fade-in duration-500">
-            <label className="w-full max-w-xl group relative flex flex-col items-center justify-center p-12 border-2 border-dashed border-slate-300 rounded-3xl bg-white hover:border-indigo-500 hover:bg-indigo-50 transition-all cursor-pointer shadow-sm">
+            <label
+              onDragOver={handleDragOver}
+              onDragEnter={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={`w-full max-w-xl group relative flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-3xl transition-all cursor-pointer shadow-sm ${isDragging ? 'border-indigo-600 bg-indigo-50 scale-[1.01]' : 'border-slate-300 bg-white hover:border-indigo-500 hover:bg-indigo-50'}`}
+            >
               <div className="p-6 bg-slate-100 rounded-2xl group-hover:bg-indigo-100 group-hover:scale-110 transition-all duration-300 mb-6"><Upload className="text-slate-400 group-hover:text-indigo-600" size={48} /></div>
               <h2 className="text-xl font-bold text-slate-800 mb-2">Upload Timesheet</h2>
               <p className="text-slate-500 text-center max-w-xs mb-8 font-medium">Drop your Excel file to transform hours into a professional invoice instantly.</p>
