@@ -74,6 +74,8 @@ const App: React.FC = () => {
   const [summary, setSummary] = useState<string>("");
   const [step, setStep] = useState(1);
   const [warnings, setWarnings] = useState<{ date: string; hours: number }[]>([]);
+  const totalHours = processedItems.reduce((acc, i) => acc + i.hours, 0);
+  const estimatedFullDays = totalHours / 8;
 
   const sortMonthDay = (dates: string[]) => {
     return [...dates].sort((a, b) => {
@@ -449,7 +451,8 @@ const App: React.FC = () => {
                  <button onClick={() => setStep(2)} className="text-slate-400 hover:text-white font-bold text-sm transition-colors">Back to Settings</button>
                  <div className="h-8 w-px bg-slate-800" />
                  <div className="flex flex-col"><span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Tasks</span><span className="text-white font-bold">{processedItems.length}</span></div>
-                 <div className="flex flex-col"><span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Hours</span><span className="text-white font-bold">{processedItems.reduce((acc, i) => acc + i.hours, 0).toFixed(1)}h</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Hours</span><span className="text-white font-bold">{totalHours.toFixed(1)}h</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Days</span><span className="text-white font-bold">{estimatedFullDays.toFixed(2)}d</span></div>
               </div>
               <div className="flex items-center gap-3">
                 <button onClick={() => window.print()} className="px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-900/40"><Printer size={16} /> Print or Save as PDF</button>
