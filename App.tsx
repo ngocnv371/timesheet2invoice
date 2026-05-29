@@ -10,12 +10,19 @@ declare const XLSX: any;
 
 const STORAGE_KEY = 'sheet_invoice_config';
 
+const getDefaultInvoiceNumber = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  return `INV-${year}${month}`;
+};
+
 const DEFAULT_CONFIG: InvoiceConfig = {
   companyName: 'Creative Studio Name',
   taxCode: 'TAX-00123456',
   address: '123 Studio Blvd, Suite 400\nCreative District, City 10101\nCountry',
   email: 'billing@creativestudio.com',
-  invoiceNumber: 'INV-' + Math.floor(Math.random() * 10000),
+  invoiceNumber: getDefaultInvoiceNumber(),
   date: new Date().toLocaleDateString(),
   clientName: 'Acme Corporation LLC',
   clientEmail: 'accounts@acmecorp.com',
@@ -54,7 +61,7 @@ const App: React.FC = () => {
         // Ensure the invoice number and date are refreshed even if loaded from storage
         return {
           ...parsed,
-          invoiceNumber: parsed.invoiceNumber || 'INV-' + Math.floor(Math.random() * 10000),
+          invoiceNumber: getDefaultInvoiceNumber(),
           date: new Date().toLocaleDateString()
         };
       } catch (e) {
