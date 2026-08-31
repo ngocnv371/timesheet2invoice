@@ -3,6 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Upload, FileSpreadsheet, ChevronRight, Check, Printer, Sparkles, Settings2, Trash2, Calendar, Layout, Building2, User, CreditCard, FileText } from 'lucide-react';
 import { FeatureRow, InvoiceConfig, TimesheetState } from './types';
 import InvoiceTemplate from './components/InvoiceTemplate';
+import DateCalendar from './components/DateCalendar';
 import exampleImage from './assets/example.png';
 
 // Access XLSX from window because it's loaded via CDN in index.html
@@ -501,6 +502,7 @@ setDailyTotals({});
                   <div className="flex flex-col"><span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Hours</span><span className="text-white font-bold">{totalHours.toFixed(1)}h</span></div>
                   <div className="flex flex-col"><span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Days</span><span className="text-white font-bold">{estimatedFullDays.toFixed(2)}d</span></div>
               </div>
+<DateCalendar dailyTotals={dailyTotals} />
               <div className="flex items-center gap-3">
                 <button onClick={() => window.print()} className="px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-900/40"><Printer size={16} /> Print or Save as PDF</button>
                 <button onClick={reset} className="p-3 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><Trash2 size={20} /></button>
