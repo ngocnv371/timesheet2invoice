@@ -82,6 +82,7 @@ const App: React.FC = () => {
   const [summary, setSummary] = useState<string>("");
   const [step, setStep] = useState(1);
   const [warnings, setWarnings] = useState<{ date: string; hours: number }[]>([]);
+const [dailyTotals, setDailyTotals] = useState<Record<string, number>>({});
   const totalHours = processedItems.reduce((acc, i) => acc + i.hours, 0);
   const estimatedFullDays = totalHours / 8;
 
@@ -113,16 +114,24 @@ const App: React.FC = () => {
     return sortMonthDay(Array.from(allDateCols));
   };
 
+  const autoSelectLastMonth = (dateCols: string[]) => {
+    if (dateCols.length === 0) return { start: '', end: '' };
+    const lastDate = dateCols[dateCols.length - 1];
+    const lastMonth = Number(lastDate.split('/')[0]);
+    const monthDates = dateCols.filter(col => Number(col.split('/')[0]) === lastMonth);
+    if (monthDates.length === 0) return { start: lastDate, end: lastDate };
+    return { start: monthDates[0], end: monthDates[monthDates.length - 1] };
+  };
+
   useEffect(() => {
     if (state.workbook && state.selectedSheets.length > 0) {
       const dateCols = getMonthDayColumns(state.workbook, state.selectedSheets);
       setState(prev => {
-        const newStart = dateCols.includes(prev.dateRange.start) ? prev.dateRange.start : (dateCols[0] || '');
-        const newEnd = dateCols.includes(prev.dateRange.end) ? prev.dateRange.end : (dateCols[dateCols.length - 1] || '');
+        const newRange = autoSelectLastMonth(dateCols);
         return {
           ...prev,
           availableDateColumns: dateCols,
-          dateRange: { start: newStart, end: newEnd }
+          dateRange: newRange
         };
       });
     } else if (state.workbook) {
@@ -226,6 +235,7 @@ const App: React.FC = () => {
     setWarnings(datesWithLowHours);
 
     const items = Object.entries(aggregated).map(([feature, hours]) => ({ feature, hours }));
+setDailyTotals(dailyTotals);
     setProcessedItems(items);
     if (items.length > 0) {
       const topItems = [...items].sort((a, b) => b.hours - a.hours).slice(0, 3);
@@ -242,6 +252,7 @@ const App: React.FC = () => {
     setProcessedItems([]);
     setSummary("");
     setWarnings([]);
+setDailyTotals({});
   };
 
   const inputClass = "w-full bg-slate-50 border-2 border-slate-100 rounded-xl p-3 font-medium outline-none focus:border-indigo-500 transition-all text-sm";
